@@ -14,5 +14,6 @@ jobs:
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
-          baseHerf: /taiwan_superzzle/
+          baseHref: /taiwan_superzzle/
           webRenderer: canvasKit
+          
