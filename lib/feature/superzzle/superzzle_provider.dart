@@ -1,6 +1,7 @@
 import 'package:taiwan_superzzle/feature/settings/settings_provider.dart';
-import 'package:taiwan_superzzle/feature/superzzle/superzzle_model.dart';
+import 'package:taiwan_superzzle/feature/superzzle/superzzle_card_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:taiwan_superzzle/feature/superzzle/superzzle_model.dart';
 
 part 'superzzle_provider.g.dart';
 
@@ -9,28 +10,37 @@ class SuperzzleGameState extends _$SuperzzleGameState {
   int? _firstCardOpenedIndex;
 
   void restart() {
-    state = readFromSettings();
+    state = state.copyWith(cards: readFromSettings(), attempts: 0);
+    _firstCardOpenedIndex = null;
+
+    ref.notifyListeners();
   }
 
-  Future<bool?> openCard(int id) async {
-    if (state[id].state == SuperzzleCardState.closed) {
+  Future<bool?> openCard(int id, Duration flipDuration,
+      Duration delayBeforeClosing, Duration delayBeforeMatching) async {
+    if (state.cards[id].state == SuperzzleCardState.closed) {
       if (_firstCardOpenedIndex != null) {
         // Second card, now check if they match
-        if (state[_firstCardOpenedIndex!].text == state[id].text) {
-          setCardState(_firstCardOpenedIndex!, SuperzzleCardState.matched);
-          setCardState(id, SuperzzleCardState.matched);
-          _firstCardOpenedIndex = null;
+        state = state.copyWith(attempts: state.attempts + 1);
+        final temp = _firstCardOpenedIndex;
+        _firstCardOpenedIndex = null;
+        setCardState(id, SuperzzleCardState.opened);
+
+        if (state.cards[temp!].text == state.cards[id].text) {
+          await Future.delayed(flipDuration + delayBeforeMatching, () {
+            setCardState(temp, SuperzzleCardState.matched);
+            setCardState(id, SuperzzleCardState.matched);
+          });
           return true;
         } else {
-          setCardState(id, SuperzzleCardState.opened);
-          final temp = _firstCardOpenedIndex;
-          _firstCardOpenedIndex = null;
-          await Future.delayed(const Duration(milliseconds: 1500), () {
-            setCardState(temp!, SuperzzleCardState.closed);
-            setCardState(id, SuperzzleCardState.closed);
-          });
+          await Future.delayed(flipDuration + delayBeforeMatching);
+          setCardState(temp, SuperzzleCardState.incorrect);
+          setCardState(id, SuperzzleCardState.incorrect);
 
-          // _firstCardOpenedIndex = null;
+          await Future.delayed(delayBeforeClosing);
+          setCardState(temp, SuperzzleCardState.closed);
+          setCardState(id, SuperzzleCardState.closed);
+
           return false;
         }
       } else {
@@ -44,7 +54,7 @@ class SuperzzleGameState extends _$SuperzzleGameState {
   }
 
   void set(List<SuperzzleCardModel> value) {
-    state = value;
+    state = state.copyWith(cards: value);
   }
 
   List<SuperzzleCardModel> readFromSettings() {
@@ -58,16 +68,16 @@ class SuperzzleGameState extends _$SuperzzleGameState {
   }
 
   void shuffle() {
-    state.shuffle();
+    state.cards.shuffle();
   }
 
   void setCardState(int index, SuperzzleCardState cardState) {
-    state[index] = state[index].copyWith(state: cardState);
+    state.cards[index] = state.cards[index].copyWith(state: cardState);
     ref.notifyListeners();
   }
 
   @override
-  List<SuperzzleCardModel> build() {
-    return readFromSettings();
+  SuperzzleGameStateModel build() {
+    return SuperzzleGameStateModel(cards: readFromSettings());
   }
 }

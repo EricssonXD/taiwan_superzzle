@@ -16,6 +16,7 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: _appRouter.config(),
       title: '對對碰',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         useMaterial3: true,

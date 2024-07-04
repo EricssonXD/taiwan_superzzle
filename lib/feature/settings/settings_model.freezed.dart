@@ -132,7 +132,7 @@ class _$SettingsModelImpl
         '三色豆'
       ],
       this.cardsPerRow = 4,
-      this.fontSize = 16})
+      this.fontSize = 20})
       : _items = items;
 
   final List<String> _items;

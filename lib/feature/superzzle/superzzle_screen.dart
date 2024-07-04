@@ -2,21 +2,28 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taiwan_superzzle/feature/settings/settings_provider.dart';
-import 'package:taiwan_superzzle/feature/superzzle/superzzle_model.dart';
+import 'package:taiwan_superzzle/feature/superzzle/superzzle_card_model.dart';
 import 'package:taiwan_superzzle/feature/superzzle/superzzle_provider.dart';
 import 'package:taiwan_superzzle/utils/router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+// import 'package:auto_size_text/auto_size_text.dart';
 
 @RoutePage()
-class SuperzzleScreen extends StatelessWidget {
+class SuperzzleScreen extends ConsumerWidget {
   const SuperzzleScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("對對碰"),
         actions: [
+          IconButton(
+            onPressed: () =>
+                ref.read(superzzleGameStateProvider.notifier).restart(),
+            icon: const Icon(
+              Icons.restart_alt,
+            ),
+          ),
           IconButton(
             onPressed: () => context.navigateTo(const HomeRoute()),
             icon: const Icon(
@@ -25,7 +32,10 @@ class SuperzzleScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const SuperzzleGrid(),
+      body: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: SuperzzleGrid(),
+      ),
     );
   }
 }
@@ -42,12 +52,16 @@ class SuperzzleGrid extends ConsumerWidget {
 
     return GridView.count(
       crossAxisCount: ref.watch(settingsStateProvider).cardsPerRow,
-      children: superzzleCards.map((e) {
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 5,
+      children: superzzleCards.cards.map((e) {
         return SuperzzleCard(card: e, id: id++);
       }).toList(),
     );
   }
 }
+
+// final myGroup = AutoSizeGroup();
 
 class SuperzzleCard extends HookConsumerWidget {
   const SuperzzleCard({
@@ -62,45 +76,57 @@ class SuperzzleCard extends HookConsumerWidget {
   final int id;
 
   void openCard(WidgetRef ref) {
-    ref.read(superzzleGameStateProvider.notifier).openCard(id);
-  }
-
-  void closeCard(WidgetRef ref) {
     ref
         .read(superzzleGameStateProvider.notifier)
-        .setCardState(id, SuperzzleCardState.closed);
+        .openCard(id, _flipDuration.ms, 1000.ms, 0.ms);
   }
 
   void toggleCard(WidgetRef ref) {
     if (card.state == SuperzzleCardState.opened) {
-      closeCard(ref);
+      ref
+          .read(superzzleGameStateProvider.notifier)
+          .setCardState(id, SuperzzleCardState.closed);
     } else {
-      openCard(ref);
+      ref
+          .read(superzzleGameStateProvider.notifier)
+          .setCardState(id, SuperzzleCardState.opened);
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Widget front = Center(
-      key: Key("${card.toString()}A"),
-      child: Text(
-        card.text,
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: ref.watch(settingsStateProvider).fontSize,
+    final Widget front = Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox.expand(
+        child: Center(
+          child: Text(
+            card.text,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: ref.watch(settingsStateProvider).fontSize,
+            ),
+          ),
+          // child: AutoSizeText(
+          //   card.text,
+          //   group: myGroup,
+          //   stepGranularity: 2,
+          //   maxLines: 1,
+          //   style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 60),
+          // ),
         ),
       ),
     );
 
-    const Widget back = Padding(
-      padding: EdgeInsets.all(22.0),
-      child: SizedBox.expand(
-        child: FittedBox(
-          child: Icon(
-            Icons.church,
-          ),
-        ),
-      ),
+    Widget back = Padding(
+      padding: const EdgeInsets.all(0),
+      // child: SizedBox.expand(
+      // child: FittedBox(
+      //   child: Icon(
+      //     Icons.church,
+      //   ),
+      // ),
+      // ),
+      child: Image.asset("assets/cardBack360.png"),
     );
 
     final isOpened = card.state != SuperzzleCardState.closed;
@@ -121,18 +147,45 @@ class SuperzzleCard extends HookConsumerWidget {
               target: isOpened ? 1 : 0,
             )
             .flipH(
-              duration: _flipDuration.ms,
+              duration: (_flipDuration / 2).ms,
               begin: 0,
               end: 0.5,
+              curve: Curves.easeIn,
             )
             .swap(
-              duration: _flipDuration.ms,
               builder: (context, child) => CardContent(
                 key: Key("${card.toString()}D"),
                 card: card,
                 id: id,
                 child: front,
-              ).animate().flipH(begin: -0.5, end: 0),
+              )
+                  .animate()
+                  .flipH(
+                      begin: -0.5,
+                      end: 0,
+                      duration: (_flipDuration / 2).ms,
+                      curve: Curves.easeOut)
+                  .toggle(
+                builder: (context, value, child) {
+                  final isMatched = card.state == SuperzzleCardState.matched;
+                  final isClose = card.state == SuperzzleCardState.incorrect;
+                  final isDone = !value;
+
+                  final target = (isDone && isMatched) ? 1.0 : 0.0;
+
+                  return child
+                      .animate(target: target)
+                      .elevation(
+                        color: Colors.greenAccent.withOpacity(0.5),
+                        end: 10,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      )
+                      .shimmer(duration: 800.ms)
+                      .animate(target: (isDone && isClose) ? 1.0 : 0.0)
+                      .shake();
+                },
+              ),
             ),
 
         // child: CardContent(card: card, id: id, child: back)

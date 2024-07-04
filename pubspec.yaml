@@ -22,6 +22,7 @@ dependencies:
   freezed_annotation: ^2.4.2
   json_annotation: ^4.9.0
   flip_card: ^0.7.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -38,3 +39,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/

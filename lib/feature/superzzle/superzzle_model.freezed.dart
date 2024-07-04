@@ -15,28 +15,29 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$SuperzzleCardModel {
-  SuperzzleCardState get state => throw _privateConstructorUsedError;
-  String get text => throw _privateConstructorUsedError;
+mixin _$SuperzzleGameStateModel {
+  int get attempts => throw _privateConstructorUsedError;
+  List<SuperzzleCardModel> get cards => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $SuperzzleCardModelCopyWith<SuperzzleCardModel> get copyWith =>
+  $SuperzzleGameStateModelCopyWith<SuperzzleGameStateModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SuperzzleCardModelCopyWith<$Res> {
-  factory $SuperzzleCardModelCopyWith(
-          SuperzzleCardModel value, $Res Function(SuperzzleCardModel) then) =
-      _$SuperzzleCardModelCopyWithImpl<$Res, SuperzzleCardModel>;
+abstract class $SuperzzleGameStateModelCopyWith<$Res> {
+  factory $SuperzzleGameStateModelCopyWith(SuperzzleGameStateModel value,
+          $Res Function(SuperzzleGameStateModel) then) =
+      _$SuperzzleGameStateModelCopyWithImpl<$Res, SuperzzleGameStateModel>;
   @useResult
-  $Res call({SuperzzleCardState state, String text});
+  $Res call({int attempts, List<SuperzzleCardModel> cards});
 }
 
 /// @nodoc
-class _$SuperzzleCardModelCopyWithImpl<$Res, $Val extends SuperzzleCardModel>
-    implements $SuperzzleCardModelCopyWith<$Res> {
-  _$SuperzzleCardModelCopyWithImpl(this._value, this._then);
+class _$SuperzzleGameStateModelCopyWithImpl<$Res,
+        $Val extends SuperzzleGameStateModel>
+    implements $SuperzzleGameStateModelCopyWith<$Res> {
+  _$SuperzzleGameStateModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -46,119 +47,125 @@ class _$SuperzzleCardModelCopyWithImpl<$Res, $Val extends SuperzzleCardModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? state = null,
-    Object? text = null,
+    Object? attempts = null,
+    Object? cards = null,
   }) {
     return _then(_value.copyWith(
-      state: null == state
-          ? _value.state
-          : state // ignore: cast_nullable_to_non_nullable
-              as SuperzzleCardState,
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as String,
+      attempts: null == attempts
+          ? _value.attempts
+          : attempts // ignore: cast_nullable_to_non_nullable
+              as int,
+      cards: null == cards
+          ? _value.cards
+          : cards // ignore: cast_nullable_to_non_nullable
+              as List<SuperzzleCardModel>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$SuperzzleCardModelImplCopyWith<$Res>
-    implements $SuperzzleCardModelCopyWith<$Res> {
-  factory _$$SuperzzleCardModelImplCopyWith(_$SuperzzleCardModelImpl value,
-          $Res Function(_$SuperzzleCardModelImpl) then) =
-      __$$SuperzzleCardModelImplCopyWithImpl<$Res>;
+abstract class _$$SuperzzleGameStateModelImplCopyWith<$Res>
+    implements $SuperzzleGameStateModelCopyWith<$Res> {
+  factory _$$SuperzzleGameStateModelImplCopyWith(
+          _$SuperzzleGameStateModelImpl value,
+          $Res Function(_$SuperzzleGameStateModelImpl) then) =
+      __$$SuperzzleGameStateModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({SuperzzleCardState state, String text});
+  $Res call({int attempts, List<SuperzzleCardModel> cards});
 }
 
 /// @nodoc
-class __$$SuperzzleCardModelImplCopyWithImpl<$Res>
-    extends _$SuperzzleCardModelCopyWithImpl<$Res, _$SuperzzleCardModelImpl>
-    implements _$$SuperzzleCardModelImplCopyWith<$Res> {
-  __$$SuperzzleCardModelImplCopyWithImpl(_$SuperzzleCardModelImpl _value,
-      $Res Function(_$SuperzzleCardModelImpl) _then)
+class __$$SuperzzleGameStateModelImplCopyWithImpl<$Res>
+    extends _$SuperzzleGameStateModelCopyWithImpl<$Res,
+        _$SuperzzleGameStateModelImpl>
+    implements _$$SuperzzleGameStateModelImplCopyWith<$Res> {
+  __$$SuperzzleGameStateModelImplCopyWithImpl(
+      _$SuperzzleGameStateModelImpl _value,
+      $Res Function(_$SuperzzleGameStateModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? state = null,
-    Object? text = null,
+    Object? attempts = null,
+    Object? cards = null,
   }) {
-    return _then(_$SuperzzleCardModelImpl(
-      state: null == state
-          ? _value.state
-          : state // ignore: cast_nullable_to_non_nullable
-              as SuperzzleCardState,
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as String,
+    return _then(_$SuperzzleGameStateModelImpl(
+      attempts: null == attempts
+          ? _value.attempts
+          : attempts // ignore: cast_nullable_to_non_nullable
+              as int,
+      cards: null == cards
+          ? _value.cards
+          : cards // ignore: cast_nullable_to_non_nullable
+              as List<SuperzzleCardModel>,
     ));
   }
 }
 
 /// @nodoc
 
-class _$SuperzzleCardModelImpl
+class _$SuperzzleGameStateModelImpl
     with DiagnosticableTreeMixin
-    implements _SuperzzleCardModel {
-  const _$SuperzzleCardModelImpl(
-      {this.state = SuperzzleCardState.closed, required this.text});
+    implements _SuperzzleGameStateModel {
+  const _$SuperzzleGameStateModelImpl(
+      {this.attempts = 0, this.cards = const []});
 
   @override
   @JsonKey()
-  final SuperzzleCardState state;
+  final int attempts;
   @override
-  final String text;
+  @JsonKey()
+  final List<SuperzzleCardModel> cards;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SuperzzleCardModel(state: $state, text: $text)';
+    return 'SuperzzleGameStateModel(attempts: $attempts, cards: $cards)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'SuperzzleCardModel'))
-      ..add(DiagnosticsProperty('state', state))
-      ..add(DiagnosticsProperty('text', text));
+      ..add(DiagnosticsProperty('type', 'SuperzzleGameStateModel'))
+      ..add(DiagnosticsProperty('attempts', attempts))
+      ..add(DiagnosticsProperty('cards', cards));
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SuperzzleCardModelImpl &&
-            (identical(other.state, state) || other.state == state) &&
-            (identical(other.text, text) || other.text == text));
+            other is _$SuperzzleGameStateModelImpl &&
+            (identical(other.attempts, attempts) ||
+                other.attempts == attempts) &&
+            const DeepCollectionEquality().equals(other.cards, cards));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, state, text);
+  int get hashCode => Object.hash(
+      runtimeType, attempts, const DeepCollectionEquality().hash(cards));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SuperzzleCardModelImplCopyWith<_$SuperzzleCardModelImpl> get copyWith =>
-      __$$SuperzzleCardModelImplCopyWithImpl<_$SuperzzleCardModelImpl>(
-          this, _$identity);
+  _$$SuperzzleGameStateModelImplCopyWith<_$SuperzzleGameStateModelImpl>
+      get copyWith => __$$SuperzzleGameStateModelImplCopyWithImpl<
+          _$SuperzzleGameStateModelImpl>(this, _$identity);
 }
 
-abstract class _SuperzzleCardModel implements SuperzzleCardModel {
-  const factory _SuperzzleCardModel(
-      {final SuperzzleCardState state,
-      required final String text}) = _$SuperzzleCardModelImpl;
+abstract class _SuperzzleGameStateModel implements SuperzzleGameStateModel {
+  const factory _SuperzzleGameStateModel(
+      {final int attempts,
+      final List<SuperzzleCardModel> cards}) = _$SuperzzleGameStateModelImpl;
 
   @override
-  SuperzzleCardState get state;
+  int get attempts;
   @override
-  String get text;
+  List<SuperzzleCardModel> get cards;
   @override
   @JsonKey(ignore: true)
-  _$$SuperzzleCardModelImplCopyWith<_$SuperzzleCardModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SuperzzleGameStateModelImplCopyWith<_$SuperzzleGameStateModelImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
