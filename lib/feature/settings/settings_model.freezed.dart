@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SettingsModel {
   List<String> get items => throw _privateConstructorUsedError;
   int get cardsPerRow => throw _privateConstructorUsedError;
+  double get fontSize => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SettingsModelCopyWith<SettingsModel> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $SettingsModelCopyWith<$Res> {
           SettingsModel value, $Res Function(SettingsModel) then) =
       _$SettingsModelCopyWithImpl<$Res, SettingsModel>;
   @useResult
-  $Res call({List<String> items, int cardsPerRow});
+  $Res call({List<String> items, int cardsPerRow, double fontSize});
 }
 
 /// @nodoc
@@ -48,6 +49,7 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
   $Res call({
     Object? items = null,
     Object? cardsPerRow = null,
+    Object? fontSize = null,
   }) {
     return _then(_value.copyWith(
       items: null == items
@@ -58,6 +60,10 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
           ? _value.cardsPerRow
           : cardsPerRow // ignore: cast_nullable_to_non_nullable
               as int,
+      fontSize: null == fontSize
+          ? _value.fontSize
+          : fontSize // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -70,7 +76,7 @@ abstract class _$$SettingsModelImplCopyWith<$Res>
       __$$SettingsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<String> items, int cardsPerRow});
+  $Res call({List<String> items, int cardsPerRow, double fontSize});
 }
 
 /// @nodoc
@@ -86,6 +92,7 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
   $Res call({
     Object? items = null,
     Object? cardsPerRow = null,
+    Object? fontSize = null,
   }) {
     return _then(_$SettingsModelImpl(
       items: null == items
@@ -96,6 +103,10 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
           ? _value.cardsPerRow
           : cardsPerRow // ignore: cast_nullable_to_non_nullable
               as int,
+      fontSize: null == fontSize
+          ? _value.fontSize
+          : fontSize // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -120,7 +131,8 @@ class _$SettingsModelImpl
         '蛋炒飯',
         '三色豆'
       ],
-      this.cardsPerRow = 4})
+      this.cardsPerRow = 4,
+      this.fontSize = 16})
       : _items = items;
 
   final List<String> _items;
@@ -135,10 +147,13 @@ class _$SettingsModelImpl
   @override
   @JsonKey()
   final int cardsPerRow;
+  @override
+  @JsonKey()
+  final double fontSize;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SettingsModel(items: $items, cardsPerRow: $cardsPerRow)';
+    return 'SettingsModel(items: $items, cardsPerRow: $cardsPerRow, fontSize: $fontSize)';
   }
 
   @override
@@ -147,7 +162,8 @@ class _$SettingsModelImpl
     properties
       ..add(DiagnosticsProperty('type', 'SettingsModel'))
       ..add(DiagnosticsProperty('items', items))
-      ..add(DiagnosticsProperty('cardsPerRow', cardsPerRow));
+      ..add(DiagnosticsProperty('cardsPerRow', cardsPerRow))
+      ..add(DiagnosticsProperty('fontSize', fontSize));
   }
 
   @override
@@ -157,12 +173,14 @@ class _$SettingsModelImpl
             other is _$SettingsModelImpl &&
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.cardsPerRow, cardsPerRow) ||
-                other.cardsPerRow == cardsPerRow));
+                other.cardsPerRow == cardsPerRow) &&
+            (identical(other.fontSize, fontSize) ||
+                other.fontSize == fontSize));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_items), cardsPerRow);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_items), cardsPerRow, fontSize);
 
   @JsonKey(ignore: true)
   @override
@@ -173,12 +191,16 @@ class _$SettingsModelImpl
 
 abstract class _SettingsModel implements SettingsModel {
   const factory _SettingsModel(
-      {final List<String> items, final int cardsPerRow}) = _$SettingsModelImpl;
+      {final List<String> items,
+      final int cardsPerRow,
+      final double fontSize}) = _$SettingsModelImpl;
 
   @override
   List<String> get items;
   @override
   int get cardsPerRow;
+  @override
+  double get fontSize;
   @override
   @JsonKey(ignore: true)
   _$$SettingsModelImplCopyWith<_$SettingsModelImpl> get copyWith =>

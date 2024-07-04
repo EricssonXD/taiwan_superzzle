@@ -22,5 +22,6 @@ class SettingsModel with _$SettingsModel {
     ])
     List<String> items,
     @Default(4) int cardsPerRow,
+    @Default(16) double fontSize,
   }) = _SettingsModel;
 }

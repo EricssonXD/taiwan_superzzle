@@ -1,15 +1,11 @@
-import 'dart:math';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taiwan_superzzle/feature/settings/settings_provider.dart';
 import 'package:taiwan_superzzle/feature/superzzle/superzzle_model.dart';
 import 'package:taiwan_superzzle/feature/superzzle/superzzle_provider.dart';
 import 'package:taiwan_superzzle/utils/router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flip_card/flip_card.dart';
 
 @RoutePage()
 class SuperzzleScreen extends StatelessWidget {
@@ -66,9 +62,7 @@ class SuperzzleCard extends HookConsumerWidget {
   final int id;
 
   void openCard(WidgetRef ref) {
-    ref
-        .read(superzzleGameStateProvider.notifier)
-        .setCardState(id, SuperzzleCardState.opened);
+    ref.read(superzzleGameStateProvider.notifier).openCard(id);
   }
 
   void closeCard(WidgetRef ref) {
@@ -89,57 +83,57 @@ class SuperzzleCard extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Widget front = Center(
       key: Key("${card.toString()}A"),
-      child: Text(card.text + id.toString() + card.state.toString()),
+      child: Text(
+        card.text,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: ref.watch(settingsStateProvider).fontSize,
+        ),
+      ),
     );
 
-    const Widget back = Center(
-      child: Text("Back"),
+    const Widget back = Padding(
+      padding: EdgeInsets.all(22.0),
+      child: SizedBox.expand(
+        child: FittedBox(
+          child: Icon(
+            Icons.church,
+          ),
+        ),
+      ),
     );
 
-    final isOpened = card.state == SuperzzleCardState.opened;
+    final isOpened = card.state != SuperzzleCardState.closed;
 
     Animate.restartOnHotReload = true;
-
-    Widget flipTransition(Widget widget, Animation<double> animation) {
-      final flipAnimation = Tween(begin: pi, end: 0.0).animate(animation);
-      return AnimatedBuilder(
-        animation: flipAnimation,
-        builder: (context, child) {
-          final isUnder = (ValueKey(isOpened) == widget.key);
-          final value =
-              isUnder ? min(flipAnimation.value, pi / 2) : flipAnimation.value;
-          return Transform(
-            transform: Matrix4.rotationY(value),
-            alignment: Alignment.center,
-            child: child,
-          );
-        },
-        child: widget,
-      );
-    }
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxHeight: 200, maxWidth: 200),
       child: GestureDetector(
-        onTap: () => toggleCard(ref),
-        child: AnimatedSwitcher(
-          duration: _flipDuration.ms,
-          reverseDuration: _flipDuration.ms,
-          transitionBuilder: flipTransition,
-          child: isOpened
-              ? CardContent(
-                  key: Key("${card.toString()}F"),
-                  card: card,
-                  id: id,
-                  child: front,
-                )
-              : CardContent(
-                  key: Key("${card.toString()}B"),
-                  card: card,
-                  id: id,
-                  child: back,
-                ),
-        ),
+        onTap: () => openCard(ref),
+        child: CardContent(
+          card: card,
+          id: id,
+          child: back,
+        )
+            .animate(
+              autoPlay: false,
+              target: isOpened ? 1 : 0,
+            )
+            .flipH(
+              duration: _flipDuration.ms,
+              begin: 0,
+              end: 0.5,
+            )
+            .swap(
+              duration: _flipDuration.ms,
+              builder: (context, child) => CardContent(
+                key: Key("${card.toString()}D"),
+                card: card,
+                id: id,
+                child: front,
+              ).animate().flipH(begin: -0.5, end: 0),
+            ),
 
         // child: CardContent(card: card, id: id, child: back)
         //     .animate(

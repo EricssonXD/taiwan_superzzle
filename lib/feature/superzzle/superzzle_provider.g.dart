@@ -7,7 +7,7 @@ part of 'superzzle_provider.dart';
 // **************************************************************************
 
 String _$superzzleGameStateHash() =>
-    r'509a9f66c0592957bd7c8385f679d404034dd42c';
+    r'cb01e01544d10a65898b947e357f7cd1c3dd4cbc';
 
 /// See also [SuperzzleGameState].
 @ProviderFor(SuperzzleGameState)
