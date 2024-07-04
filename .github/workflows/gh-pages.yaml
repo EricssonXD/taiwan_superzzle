@@ -15,5 +15,5 @@ jobs:
       - uses: bluefireteam/flutter-gh-pages@v7
         with:
           baseHref: /taiwan_superzzle/
-          webRenderer: canvasKit
+          webRenderer: canvaskit
           
